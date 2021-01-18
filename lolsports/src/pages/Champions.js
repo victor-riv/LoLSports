@@ -1,26 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { getChampions } from "../utilities/riotApi";
+import React, { useEffect, useContext } from "react";
+import { getChampions, buildChampionsArray } from "../utilities/riotApi";
+import { store } from "../utilities/RiotAPIContext";
 import { ChampionCard } from "../components/ChampionCard";
 
 const ChampionsPage = () => {
-  const [champions, setChampions] = useState([]);
+  const { dispatch, state } = useContext(store);
 
   useEffect(() => {
-    getChampions().then((res) => buildChampionsArray(res.data));
-  }, [champions]);
-
-  const buildChampionsArray = (obj) => {
-    const championsArray = [];
-    for (const [key, value] of Object.entries(obj)) {
-      championsArray.push(value);
-    }
-    setChampions(championsArray);
-  };
+    getChampions().then((res) => {
+      dispatch({
+        type: "FETCH_CHAMPIONS",
+        champions: buildChampionsArray(res.data),
+      });
+    });
+  }, []);
 
   return (
     <div>
-      {champions &&
-        champions.map((champ) => (
+      {state.champions &&
+        state.champions.map((champ) => (
           <ChampionCard key={champ.name} champion={champ} />
         ))}
     </div>

@@ -1,11 +1,12 @@
 import React from "react";
+import { RiotAPIProvider } from "./utilities/RiotAPIContext";
 import { ChampionsPage } from "./pages/Champions";
 
 const App = () => {
   return (
-    <div>
+    <RiotAPIProvider>
       <ChampionsPage />
-    </div>
+    </RiotAPIProvider>
   );
 };
 
